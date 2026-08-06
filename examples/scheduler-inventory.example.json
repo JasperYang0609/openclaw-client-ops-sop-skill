@@ -1,0 +1,10 @@
+{
+  "schema": "openclaw-scheduler-inventory-v1",
+  "jobs": [
+    {
+      "name": "ansai:example:daily-check",
+      "schedule": "15 5 * * *",
+      "command": "python3 skills/example-managed/generate_issue_entry.py --help"
+    }
+  ]
+}

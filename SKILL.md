@@ -85,6 +85,22 @@ If found, update or append only when safe. If not found, create once.
 
 Read `references/idempotency.md` for examples.
 
+## Repo-backed deployment provenance
+
+When client-local scripts or enabled scheduler jobs need reliability work, do not patch the live machine first. Establish an owned canonical Repository and a versioned deployment spec, then capture a provenance manifest from a clean committed HEAD.
+
+Use `scripts/deployment_provenance.py` to record credential-free repository URL, full Git commit, spec hash, deployed-file hashes/modes, and managed scheduler job hashes. Use only a client-approved **read-only scheduler inventory** as verifier input. The tool must not install files, read/write crontab, edit scheduler state, or delete drifted resources.
+
+Rules:
+
+1. Block capture if the Repository is dirty, has untracked files, or a source is not a regular tracked file at HEAD.
+2. Keep target paths relative to a declared managed root; keep scheduler ownership inside a stable job namespace.
+3. Never persist raw scheduler commands in the generated manifest. Never persist tokens, credentials, client absolute paths, or private keys.
+4. Verify exact managed file/job sets plus SHA-256 and executable mode. Missing, extra, duplicate, symlinked, or drifted items are blockers.
+5. A mismatch creates a reconciliation plan, not an automatic repair. Ask before client deployment, scheduler edits, deletion, or restart.
+
+Read `references/deployment-provenance.md` for the contract and examples.
+
 ## Discord recipient governance
 
 Do not send client messages by display name or nickname when the recipient matters.
@@ -179,4 +195,9 @@ Do not paste large logs into chat. Summarize and keep full logs in files.
 - `references/recovery.md` — partial execution recovery checklist.
 - `references/idempotency.md` — stable keys and duplicate prevention examples.
 - `references/claude-overload.md` — Claude API overload/rate-limit triage.
+- `references/deployment-provenance.md` — clean-Git provenance and read-only deployment/scheduler drift checks.
+- `examples/deployment-spec.example.json` — versioned deployment contract example.
+- `examples/scheduler-inventory.example.json` — read-only scheduler inventory shape.
+- `scripts/deployment_provenance.py` — capture deterministic manifests and verify drift without mutating clients.
 - `scripts/generate_issue_entry.py` — prints a customer issue ledger entry template.
+- `scripts/post_run_check.py` — dependency-free maintainer validation.

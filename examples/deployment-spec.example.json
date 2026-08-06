@@ -1,0 +1,20 @@
+{
+  "schema": "openclaw-client-deployment-spec-v1",
+  "managedRoots": [
+    "skills/example-managed"
+  ],
+  "jobNamespace": "ansai:example:",
+  "files": [
+    {
+      "source": "scripts/generate_issue_entry.py",
+      "target": "skills/example-managed/generate_issue_entry.py"
+    }
+  ],
+  "jobs": [
+    {
+      "name": "ansai:example:daily-check",
+      "schedule": "15 5 * * *",
+      "command": "python3 skills/example-managed/generate_issue_entry.py --help"
+    }
+  ]
+}
