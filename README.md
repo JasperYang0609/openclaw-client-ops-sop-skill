@@ -26,4 +26,6 @@ The provenance manifest contains a canonical Git remote/commit and hashes. It in
 python3 scripts/post_run_check.py
 ```
 
+Before pushing, accumulate a reviewable change and run `bash scripts/check_push.sh`. Non-main branches run Branch Check; pull requests and `main` run full CI. An open PR suppresses duplicate branch tests, superseded runs are cancelled, and genuine failure notifications remain enabled.
+
 The Repository uses only the Python standard library for these checks.
